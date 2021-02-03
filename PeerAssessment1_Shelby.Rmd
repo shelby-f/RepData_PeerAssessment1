@@ -1,0 +1,44 @@
+---
+title: "RepData_PA1_Shelby"
+author: "Shelby Fillinger"
+date: "2/3/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Peer Assessment 1 
+
+
+```{r data}
+activity <- read.csv("activity.csv")
+```
+
+## Total Steps Per Day 
+```{r sum}
+sum <- aggregate(x = activity$steps,   #data   
+          by = list(activity$date),    #grouping          
+          FUN = sum, na.rm = TRUE)    #ignore missing values 
+```
+
+## Histogram of Steps Per Day 
+```{r histogram}
+hist(sum$x, xlab = "Steps Per Day")
+```
+
+## Mean and Median 
+
+```{r mean}
+mean <- mean(sum$x, na.rm = TRUE)   
+mean
+median <- median(sum$x, na.rm = TRUE)
+median
+```
+
+# Average Daily Activity Pattern 
+
+```{r }
+
+```
