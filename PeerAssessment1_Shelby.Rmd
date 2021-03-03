@@ -10,8 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## Peer Assessment 1 
-
-
+### Load Data
 ```{r data}
 activity <- read.csv("activity.csv")
 ```
@@ -20,25 +19,77 @@ activity <- read.csv("activity.csv")
 ```{r sum}
 sum <- aggregate(x = activity$steps,   #data   
           by = list(activity$date),    #grouping          
-          FUN = sum, na.rm = TRUE)    #ignore missing values 
+          FUN = sum, na.rm = TRUE)    #ignore missing values
 ```
 
-## Histogram of Steps Per Day 
+### Histogram of Steps Per Day 
 ```{r histogram}
 hist(sum$x, xlab = "Steps Per Day")
 ```
 
-## Mean and Median 
-
+### Mean and Median 
 ```{r mean}
-mean <- mean(sum$x, na.rm = TRUE)   
+mean <- mean(sum$x, na.rm = TRUE)   #ignore missing values
 mean
-median <- median(sum$x, na.rm = TRUE)
+median <- median(sum$x, na.rm = TRUE) #ignore missing values 
 median
 ```
 
-# Average Daily Activity Pattern 
-
+## Daily Activity Pattern 
 ```{r }
-
+maxtime <- aggregate(x = activity$steps,   #data   
+          by = list(activity$interval),    #grouping          
+          FUN = sum, na.rm = TRUE)
 ```
+### Time Series Daily Activity 
+```{r time series}
+plot(maxtime, xlab = "Interval", ylab = "Steps")
+```
+
+### Interval with Most Steps on Average 
+```{r max}
+t <- which.max(maxtime$x)       #row with maximum 
+maxtime$Group.1[t]              #interval in relation to max row 
+```
+
+## Imputing Missing Values 
+### Calculate NAs
+```{r missing NAs}
+sum(is.na(activity))      #sum of NAs in data set 
+```
+### Fill In Missing Data 
+Create a new data set, impute, that will hold the data with filled NA values. The NA values are replaced with the mean number of steps taken across all days and intervals. 
+```{r fill}
+library(tidyr)        #import tidyr to use replace_na
+imputed <- replace_na(activity, 
+          list(steps = mean(activity$steps,  #replace NA in steps
+                       na.rm = TRUE)))      #with the mean for steps
+```
+
+## Total Steps Per Day with Imputed Data
+```{r sum2}
+sum2 <- aggregate(x = imputed$steps,   #data   
+          by = list(imputed$date),    #grouping          
+          FUN = sum, na.rm = TRUE)    #ignore missing values
+```
+
+### Histogram of Steps Per Day with Imputed Data
+```{r histogram2}
+hist(sum2$x, xlab = "Steps Per Day with Imputed Data")
+```
+
+### Mean and Median with Imputed Data 
+```{r mean2}
+mean2 <- mean(sum2$x, na.rm = TRUE)   #ignore missing values
+mean2
+median2 <- median(sum2$x, na.rm = TRUE) #ignore missing values 
+median2
+```
+Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
+
+ANSWER
+
+## Difference Between Weekdays and Weekends 
+```{r weekday}
+
+
